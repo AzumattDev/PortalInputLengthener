@@ -18,23 +18,17 @@ namespace PortalInputLengthener
         private const string ModGUID = Author + "." + ModName;
         private static string ConfigFileName = ModGUID + ".cfg";
         private static string ConfigFileFullPath = Paths.ConfigPath + Path.DirectorySeparatorChar + ConfigFileName;
-
         internal static string ConnectionError = "";
-
         private readonly Harmony _harmony = new(ModGUID);
+        public static readonly ManualLogSource PortalInputLengthenerLogger = BepInEx.Logging.Logger.CreateLogSource(ModName);
 
-        public static readonly ManualLogSource PortalInputLengthenerLogger =
-            BepInEx.Logging.Logger.CreateLogSource(ModName);
-
-        private static readonly ConfigSync ConfigSync = new(ModGUID)
-            { DisplayName = ModName, CurrentVersion = ModVersion, MinimumRequiredVersion = ModVersion };
+        private static readonly ConfigSync ConfigSync = new(ModGUID) { DisplayName = ModName, CurrentVersion = ModVersion, MinimumRequiredVersion = ModVersion };
 
         public void Awake()
         {
             ConfigSync.IsLocked = true;
 
-            CharacterLimit = config("Portal Config", "Character Limit", true,
-                "Removes the character limit for portals. Default value of Vanilla is 10 characters.");
+            CharacterLimit = config("Portal Config", "Character Limit", true, "Removes the character limit for portals. Default value of Vanilla is 10 characters.");
 
             Assembly assembly = Assembly.GetExecutingAssembly();
             _harmony.PatchAll(assembly);
@@ -75,7 +69,6 @@ namespace PortalInputLengthener
 
         #region ConfigOptions
 
-        private static ConfigEntry<bool> _serverConfigLocked = null!;
         internal static ConfigEntry<bool> CharacterLimit = null!;
 
         private ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description,
@@ -99,24 +92,6 @@ namespace PortalInputLengthener
             bool synchronizedSetting = true)
         {
             return config(group, name, value, new ConfigDescription(description), synchronizedSetting);
-        }
-
-        private class ConfigurationManagerAttributes
-        {
-            public bool? Browsable = false;
-        }
-
-        class AcceptableShortcuts : AcceptableValueBase
-        {
-            public AcceptableShortcuts() : base(typeof(KeyboardShortcut))
-            {
-            }
-
-            public override object Clamp(object value) => value;
-            public override bool IsValid(object value) => true;
-
-            public override string ToDescriptionString() =>
-                "# Acceptable values: " + string.Join(", ", KeyboardShortcut.AllKeyCodes);
         }
 
         #endregion

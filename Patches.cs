@@ -8,8 +8,7 @@ namespace PortalInputLengthener;
 [HarmonyPatch(typeof(TeleportWorld), nameof(TeleportWorld.Interact))]
 class InteractPatch
 {
-    private static IEnumerable<CodeInstruction> Transpiler(
-        IEnumerable<CodeInstruction> instructions)
+    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
     {
         List<CodeInstruction> source = new(instructions);
         if (!PortalInputLengthenerPlugin.CharacterLimit.Value) return source.AsEnumerable();

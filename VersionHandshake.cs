@@ -13,8 +13,7 @@ public class PortalInputLengthenerVersionHandshake
         {
             // Register version check call
             PortalInputLengthenerPlugin.PortalInputLengthenerLogger.LogDebug("Registering version RPC handler");
-            peer.m_rpc.Register($"{PortalInputLengthenerPlugin.ModName}_VersionCheck",
-                new Action<ZRpc, ZPackage>(RpcHandlers.RPC_PortalInputL_Version));
+            peer.m_rpc.Register($"{PortalInputLengthenerPlugin.ModName}_VersionCheck", new Action<ZRpc, ZPackage>(RpcHandlers.RPC_PortalInputL_Version));
 
             // Make calls to check versions
             PortalInputLengthenerPlugin.PortalInputLengthenerLogger.LogInfo("Invoking version check");
@@ -39,8 +38,7 @@ public class PortalInputLengthenerVersionHandshake
 
         private static void Postfix(ZNet __instance)
         {
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "PortalInputLRequestAdminSync",
-                new ZPackage());
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), $"{PortalInputLengthenerPlugin.ModName}RequestAdminSync", new ZPackage());
         }
     }
 
@@ -61,8 +59,7 @@ public class PortalInputLengthenerVersionHandshake
         {
             if (!__instance.IsServer()) return;
             // Remove peer from validated list
-            PortalInputLengthenerPlugin.PortalInputLengthenerLogger.LogInfo(
-                $"Peer ({peer.m_rpc.m_socket.GetHostName()}) disconnected, removing from validated list");
+            PortalInputLengthenerPlugin.PortalInputLengthenerLogger.LogInfo($"Peer ({peer.m_rpc.m_socket.GetHostName()}) disconnected, removing from validated list");
             _ = RpcHandlers.ValidatedPeers.Remove(peer.m_rpc);
         }
     }
